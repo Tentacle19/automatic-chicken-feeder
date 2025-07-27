@@ -1,0 +1,81 @@
+int enA = 9;  
+int in1 = 8; 
+int in2 = 7; 
+
+int enB = 3; 
+int in3 = 5; 
+int in4 = 4; 
+
+int irSensor = 13; 
+int irState = 0;  
+int previousIrState = 0; 
+bool motorReversed = false; 
+int irDetectionCount = 0; 
+
+void setup() {
+ 
+  pinMode(enA, OUTPUT);
+  pinMode(in1, OUTPUT);
+  pinMode(in2, OUTPUT);
+  pinMode(enB, OUTPUT);
+  pinMode(in3, OUTPUT);
+  pinMode(in4, OUTPUT);
+
+  
+  pinMode(irSensor, INPUT);
+
+  
+  analogWrite(enA, 50); 
+  analogWrite(enB, 255); 
+
+  
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+}
+
+void loop() {
+  
+  irState = digitalRead(irSensor);
+
+  
+  if (irState == HIGH && previousIrState == LOW) {
+   
+    irDetectionCount++; 
+
+    
+    if (irDetectionCount == 1) {
+      
+      motorReversed = false;
+    } else if (irDetectionCount == 2) {
+     
+      motorReversed = true;
+    } else if (irDetectionCount == 3) {
+      
+      digitalWrite(enA, LOW);
+      digitalWrite(enB, LOW); 
+      while (true) {
+        
+      }
+    }
+  }
+
+
+  previousIrState = irState;
+
+  
+  if (motorReversed) {
+   
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, HIGH);
+    digitalWrite(in3, LOW);
+    digitalWrite(in4, HIGH);
+  } else {
+    
+    digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW);
+    digitalWrite(in3, HIGH);
+    digitalWrite(in4, LOW);
+  }
+}
